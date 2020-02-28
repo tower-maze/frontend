@@ -8,6 +8,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./lazy/onboarding/onboarding.module').then((m) => m.OnboardingModule)
   },
+  {
+    path: 'game',
+    loadChildren: () => import('./lazy/game/game.module').then((m) => m.GameModule)
+  },
   { path: '**', redirectTo: '' }
 ];
 

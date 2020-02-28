@@ -1,0 +1,43 @@
+:host {
+  display: grid;
+  grid-template-areas:
+    'nav      nav      nav'
+    'world     world    world'
+    'world     world    world'
+    'controls controls controls';
+
+  grid-template-rows: 56px 1fr 1fr 128px;
+  grid-template-columns: 304px 1fr 304px;
+  grid-gap: 8px;
+  margin: 8px;
+
+  height: calc(100vh - 16px);
+}
+
+.nav {
+  grid-area: nav;
+}
+
+.chat {
+  grid-area: chat;
+}
+
+.enemy {
+  grid-area: enemy;
+}
+
+.world {
+  grid-area: world;
+}
+
+.character {
+  grid-area: character;
+}
+
+.inventory {
+  grid-area: inventory;
+}
+
+.controls {
+  grid-area: controls;
+}
