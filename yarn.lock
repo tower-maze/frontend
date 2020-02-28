@@ -934,14 +934,14 @@
     rxjs "6.5.3"
     webpack-sources "1.4.3"
 
-"@ngxs/devtools-plugin@^3.3.2":
+"@ngxs/devtools-plugin@^3.6.2":
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/@ngxs/devtools-plugin/-/devtools-plugin-3.6.2.tgz#aa0a4835f90fb905951d7712dc3ce508cbc15a2c"
   integrity sha512-0UUZlpXgEtrHoWNeVQXEvUyC6pW8nTACpqJgecuBjYJMa5imCCUSXdrpear8ztJuWwpLqMUSGk5cICNhKqK59g==
   dependencies:
     tslib "^1.9.0"
 
-"@ngxs/logger-plugin@^3.3.2":
+"@ngxs/logger-plugin@^3.6.2":
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/@ngxs/logger-plugin/-/logger-plugin-3.6.2.tgz#1a8132a0b1eb95cad79736120fd50a331fe7347b"
   integrity sha512-qF4ci9Ua7jL7r5EhZBEb0JB0HuGsTgFShK3OVTYSXU9+XfSb+5vrDLtmTshmBqQy6dWCd+2xq4LzBgc8IKMRuQ==
@@ -957,7 +957,7 @@
     "@angular-devkit/schematics" "^7.1.0"
     typescript "^3.2.1"
 
-"@ngxs/store@^3.3.2":
+"@ngxs/store@^3.6.2":
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.6.2.tgz#cfba63dc1e5bd422e89e54b3332cd69818510624"
   integrity sha512-al7GU618SAuz2Ul4rFYVDgS1DM0gHReGOGvbnE7LBt4Etz3gsJERNYXPp2bSA7lZGaRPRaFfIHJN+Lm/GikFJw==
@@ -5608,6 +5608,13 @@ neo-async@^2.5.0, neo-async@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
+
+ngx-quicklink@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/ngx-quicklink/-/ngx-quicklink-0.2.0.tgz#68c0ad097dac768d29b8d977ddcf8c413e463725"
+  integrity sha512-9Y0SS997WW0My4W6xWwDYBMWYVphictDIMkwXWMo7d3Pzzje6ZVVDXuIkcsW89wqvyGJfH1E8PoS2fsgZA1I2Q==
+  dependencies:
+    tslib "^1.9.0"
 
 nice-try@^1.0.4:
   version "1.0.5"
