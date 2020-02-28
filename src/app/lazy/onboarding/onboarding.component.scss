@@ -1,0 +1,59 @@
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+
+  z-index: -10;
+
+  background: linear-gradient(to top right, #13547a, #80d0c7);
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+header {
+  color: white;
+  margin-bottom: 36px;
+  text-align: center;
+
+  h1 {
+    font-size: 56px;
+  }
+}
+
+mat-card {
+  width: 600px;
+  max-width: 90%;
+  margin: 5px;
+  transition: height 0.5s ease-in-out;
+}
+
+mat-card.login {
+  height: 215px;
+}
+
+mat-card.signup {
+  height: 275px;
+}
+
+::ng-deep {
+  mat-tab-header {
+    margin: -16px -16px 0px -16px;
+  }
+
+  mat-tab-group {
+    height: 100%;
+  }
+
+  .mat-tab-body-wrapper {
+    height: 100%;
+  }
+}

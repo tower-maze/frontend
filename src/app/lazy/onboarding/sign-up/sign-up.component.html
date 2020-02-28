@@ -1,0 +1,33 @@
+<form [formGroup]="signUpForm" class="signup" (ngSubmit)="signUp()">
+  <mat-form-field>
+    <input matInput type="text" formControlName="email" placeholder="Email" />
+    <mat-error *ngIf="email?.invalid && password?.touched">
+      Please enter your email
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="password" formControlName="password" placeholder="Password" />
+    <mat-error *ngIf="password?.errors?.required && password?.touched">
+      Please enter your password
+    </mat-error>
+
+    <mat-error *ngIf="password?.errors?.minlength && password?.touched">
+      Please enter at least 6 characters
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      type="password"
+      formControlName="confirmPassword"
+      placeholder="Confirm Password"
+    />
+    <mat-error *ngIf="confirmPassword?.invalid && password?.touched">
+      Your password does not match
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Signup</button>
+</form>

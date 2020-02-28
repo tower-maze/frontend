@@ -5,7 +5,8 @@ import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./lazy/login/login.module').then((m) => m.LoginModule)
+    loadChildren: () =>
+      import('./lazy/onboarding/onboarding.module').then((m) => m.OnboardingModule)
   },
   { path: '**', redirectTo: '' }
 ];

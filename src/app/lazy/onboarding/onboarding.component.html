@@ -1,0 +1,22 @@
+<figure class="background"></figure>
+
+<header>
+  <h1>Welcome to [name]</h1>
+  <div>[graphic]</div>
+</header>
+
+<mat-card class="prompt" [ngClass]="selectedTab === 0 ? 'login' : 'signup'">
+  <mat-tab-group
+    mat-align-tabs="center"
+    [selectedIndex]="selectedTab"
+    (selectedIndexChange)="selectedTab = $event"
+  >
+    <mat-tab label="Login">
+      <app-login></app-login>
+    </mat-tab>
+
+    <mat-tab label="Signup">
+      <app-sign-up></app-sign-up>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
