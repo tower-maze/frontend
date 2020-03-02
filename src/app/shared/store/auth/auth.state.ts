@@ -41,39 +41,27 @@ export class AuthState {
 
   @Action(Login)
   public async login(ctx: StateContext<IUserModel>, { payload }: Login) {
-    try {
-      await this.http
-        .post(`${environment.apiURL}/api/login/`, payload, { withCredentials: true })
-        .toPromise();
-      this.navigate('/game');
-    } catch (err) {
-      console.log(err);
-    }
+    await this.http
+      .post(`${environment.apiURL}/api/login/`, payload, { withCredentials: true })
+      .toPromise();
+    this.navigate('/game');
   }
 
   @Action(Register)
   public async register(ctx: StateContext<IUserModel>, { payload }: Register) {
-    try {
-      await this.http
-        .post(`${environment.apiURL}/api/registration/`, payload, {
-          withCredentials: true
-        })
-        .toPromise();
-      this.navigate('/game');
-    } catch (err) {
-      console.log(err);
-    }
+    await this.http
+      .post(`${environment.apiURL}/api/registration/`, payload, {
+        withCredentials: true
+      })
+      .toPromise();
+    this.navigate('/game');
   }
 
   @Action(GetUser)
   public async getUser({ getState, setState }: StateContext<IUserModel>) {
-    try {
-      const user = await this.http
-        .get<IUserModel>(`${environment.apiURL}/api/user/`, { withCredentials: true })
-        .toPromise();
-      setState(AuthState.setInstanceState(user));
-    } catch (err) {
-      setState(AuthState.setInstanceState({ ...getState(), pk: -2 }));
-    }
+    const user = await this.http
+      .get<IUserModel>(`${environment.apiURL}/api/user/`, { withCredentials: true })
+      .toPromise();
+    setState(AuthState.setInstanceState(user));
   }
 }
