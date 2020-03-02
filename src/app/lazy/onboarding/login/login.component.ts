@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { Dispatch } from '@ngxs-labs/dispatch-decorator';
+import { Login } from '../../../shared/store/auth/auth.actions';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -27,7 +30,6 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
-  public login() {
-    console.log(this.loginForm);
-  }
+  @Dispatch()
+  public login = () => new Login(this.loginForm.value);
 }

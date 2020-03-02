@@ -1,13 +1,20 @@
 <form [formGroup]="signUpForm" class="signup" (ngSubmit)="signUp()">
   <mat-form-field>
     <input matInput type="text" formControlName="email" placeholder="Email" />
-    <mat-error *ngIf="email?.invalid && password?.touched">
+    <mat-error *ngIf="email?.invalid && email?.touched">
       Please enter your email
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput type="password" formControlName="password" placeholder="Password" />
+    <input matInput type="text" formControlName="username" placeholder="Username" />
+    <mat-error *ngIf="username?.invalid && username?.touched">
+      Please enter your username
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="password" formControlName="password1" placeholder="Password" />
     <mat-error *ngIf="password?.errors?.required && password?.touched">
       Please enter your password
     </mat-error>
@@ -18,12 +25,7 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      type="password"
-      formControlName="confirmPassword"
-      placeholder="Confirm Password"
-    />
+    <input matInput type="password" formControlName="password2" placeholder="Confirm Password" />
     <mat-error *ngIf="confirmPassword?.invalid && password?.touched">
       Your password does not match
     </mat-error>

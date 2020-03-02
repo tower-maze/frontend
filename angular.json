@@ -64,7 +64,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mud:build"
+            "browserTarget": "mud:build",
+            "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {
             "production": {

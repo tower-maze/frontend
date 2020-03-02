@@ -5,9 +5,10 @@ import { MatCardModule } from '@angular/material/card';
 
 import { GameRoutingModule } from './game-routing.module';
 import { GameComponent } from './game.component';
+import { WorldComponent } from './world/world.component';
 
 @NgModule({
-  declarations: [GameComponent],
+  declarations: [GameComponent, WorldComponent],
   imports: [CommonModule, MatCardModule, GameRoutingModule]
 })
 export class GameModule {}
