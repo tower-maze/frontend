@@ -3,5 +3,5 @@ export interface IUserModel {
   username: string;
   email: string;
   first_name: string;
-  lass_name: string;
+  last_name: string;
 }

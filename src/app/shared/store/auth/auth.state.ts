@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
     username: '',
     email: '',
     first_name: '',
-    lass_name: ''
+    last_name: ''
   }
 })
 @Injectable({ providedIn: 'root' })
