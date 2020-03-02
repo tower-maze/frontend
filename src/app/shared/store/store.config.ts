@@ -1,9 +1,9 @@
-import { AuthStateModule } from './auth/auth.state';
+import { AuthState } from './auth/auth.state';
 import { NgxsConfig } from '@ngxs/store/src/symbols';
 import { NgxsDevtoolsOptions } from '@ngxs/devtools-plugin/src/symbols';
 import { NgxsLoggerPluginOptions } from '@ngxs/logger-plugin/src/symbols';
 
-export const STATES_MODULES = [AuthStateModule];
+export const STATES_MODULES = [AuthState];
 
 export const OPTIONS_CONFIG: Partial<NgxsConfig> = {
   /**
