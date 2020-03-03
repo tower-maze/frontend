@@ -1,3 +1,6 @@
+@import '~@angular/material/theming';
+@import 'variables';
+
 .background {
   position: absolute;
   top: 0;
@@ -8,7 +11,7 @@
 
   z-index: -10;
 
-  background: linear-gradient(to top right, #13547a, #80d0c7);
+  background: linear-gradient(to top right, mat-color($accent), mat-color($primary));
 }
 
 :host {
