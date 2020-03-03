@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Dispatch } from '@ngxs-labs/dispatch-decorator';
+import { Logout } from '../../shared/store/auth/auth.actions';
 
 @Component({
   templateUrl: './game.component.html',
@@ -7,6 +9,9 @@ import { Component, OnInit } from '@angular/core';
 export class GameComponent implements OnInit {
   constructor() {}
 
+  @Dispatch()
+  public logout = () => new Logout();
+
   @Override()
-  public ngOnInit(): void {}
+  public ngOnInit() {}
 }

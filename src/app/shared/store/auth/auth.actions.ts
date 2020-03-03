@@ -15,3 +15,7 @@ export class Register {
 export class GetUser {
   public static readonly type = '[Auth] GetUser';
 }
+
+export class Logout {
+  public static readonly type = '[Auth] Logout';
+}

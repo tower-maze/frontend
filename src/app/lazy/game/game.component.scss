@@ -16,6 +16,13 @@
 
 .nav {
   grid-area: nav;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    margin: 0;
+  }
 }
 
 .chat {

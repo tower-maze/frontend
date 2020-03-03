@@ -2,25 +2,31 @@ import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
-import { Register, Login, GetUser } from './auth.actions';
+import { Register, Login, GetUser, Logout } from './auth.actions';
 
 import { IUserModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 
+const defaults: IUserModel = {
+  pk: -1,
+  username: '',
+  email: '',
+  first_name: '',
+  last_name: ''
+};
+
 @State<IUserModel>({
   name: 'authState',
-  defaults: {
-    pk: -1,
-    username: '',
-    email: '',
-    first_name: '',
-    last_name: ''
-  }
+  defaults
 })
 @Injectable({ providedIn: 'root' })
 export class AuthState {
-  constructor(private ngZone: NgZone, private http: HttpClient, private router: Router) {}
+  constructor(
+    private readonly ngZone: NgZone,
+    private readonly http: HttpClient,
+    private readonly router: Router
+  ) {}
 
   @Selector()
   public static getAuthData(state: IUserModel): IUserModel {
@@ -41,27 +47,26 @@ export class AuthState {
 
   @Action(Login)
   public async login(ctx: StateContext<IUserModel>, { payload }: Login) {
-    await this.http
-      .post(`${environment.apiURL}/api/login/`, payload, { withCredentials: true })
-      .toPromise();
+    await this.http.post(`${environment.apiURL}/api/login/`, payload).toPromise();
     this.navigate('/game');
   }
 
   @Action(Register)
   public async register(ctx: StateContext<IUserModel>, { payload }: Register) {
-    await this.http
-      .post(`${environment.apiURL}/api/registration/`, payload, {
-        withCredentials: true
-      })
-      .toPromise();
+    await this.http.post(`${environment.apiURL}/api/registration/`, payload).toPromise();
     this.navigate('/game');
   }
 
   @Action(GetUser)
-  public async getUser({ getState, setState }: StateContext<IUserModel>) {
-    const user = await this.http
-      .get<IUserModel>(`${environment.apiURL}/api/user/`, { withCredentials: true })
-      .toPromise();
+  public async getUser({ setState }: StateContext<IUserModel>) {
+    const user = await this.http.get<IUserModel>(`${environment.apiURL}/api/user/`).toPromise();
     setState(AuthState.setInstanceState(user));
+  }
+
+  @Action(Logout)
+  public async logout({ setState }: StateContext<IUserModel>) {
+    await this.http.post(`${environment.apiURL}/api/logout/`, {}).toPromise();
+    setState(AuthState.setInstanceState(defaults));
+    this.navigate('/');
   }
 }
