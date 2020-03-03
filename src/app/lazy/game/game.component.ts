@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Dispatch } from '@ngxs-labs/dispatch-decorator';
+
+import { Direction } from '../../models';
 import { Logout } from '../../shared/store/auth/auth.actions';
+import { MovePlayer } from 'src/app/shared/store/game/game.actions';
 
 @Component({
   templateUrl: './game.component.html',
@@ -14,4 +17,7 @@ export class GameComponent implements OnInit {
 
   @Override()
   public ngOnInit() {}
+
+  @Dispatch()
+  public movePlayer = (direction: Direction) => new MovePlayer(direction);
 }
