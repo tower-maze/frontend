@@ -30,15 +30,15 @@ export class AuthState {
   ) {}
 
   @Selector()
-  public static getAuthData(state: IUserModel): IUserModel {
+  public static getAuthData(state: IUserModel) {
     return AuthState.getInstanceState(state);
   }
 
-  private static setInstanceState(state: IUserModel): IUserModel {
+  private static setInstanceState(state: IUserModel) {
     return { ...state };
   }
 
-  private static getInstanceState(state: IUserModel): IUserModel {
+  private static getInstanceState(state: IUserModel) {
     return { ...state };
   }
 

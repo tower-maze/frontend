@@ -2,10 +2,11 @@ import { NgxsConfig } from '@ngxs/store/src/symbols';
 import { NgxsDevtoolsOptions } from '@ngxs/devtools-plugin/src/symbols';
 import { NgxsLoggerPluginOptions } from '@ngxs/logger-plugin/src/symbols';
 
-import { AuthState } from './auth/auth.state';
 import { environment } from '../../../environments/environment';
+import { AuthState } from './auth/auth.state';
+import { GameState } from './game/game.state';
 
-export const STATES_MODULES = [AuthState];
+export const STATES_MODULES = [AuthState, GameState];
 
 export const OPTIONS_CONFIG: Partial<NgxsConfig> = {
   /**
