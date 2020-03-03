@@ -8,4 +8,8 @@ form {
   mat-form-field {
     margin: 4px;
   }
+
+  mat-form-field:last-of-type {
+    margin-bottom: 16px;
+  }
 }
