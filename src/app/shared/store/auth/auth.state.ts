@@ -1,12 +1,13 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
 import { Register, Login, GetUser, Logout } from './auth.actions';
 
 import { IUserModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
-import { Router } from '@angular/router';
 
 const defaults: IUserModel = {
   pk: -1,
@@ -48,6 +49,7 @@ export class AuthState {
   @Action(Login)
   public async login(ctx: StateContext<IUserModel>, { payload }: Login) {
     await this.http.post(`${environment.apiURL}/api/login/`, payload).toPromise();
+
     this.navigate('/game');
   }
 
