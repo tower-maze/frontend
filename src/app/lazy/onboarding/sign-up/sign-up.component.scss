@@ -5,7 +5,11 @@ form {
   align-items: center;
   height: 100%;
 
-  mat-text-field {
-    margin: 10px;
+  mat-form-field {
+    margin: 4px;
+  }
+
+  mat-form-field:last-of-type {
+    margin-bottom: 16px;
   }
 }

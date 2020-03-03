@@ -934,6 +934,13 @@
     rxjs "6.5.3"
     webpack-sources "1.4.3"
 
+"@ngxs-labs/dispatch-decorator@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@ngxs-labs/dispatch-decorator/-/dispatch-decorator-2.1.0.tgz#d35a21566b9786ccff094c3227935f9d7bf45444"
+  integrity sha512-0O+1b2ILLs9enA0PmRzlA6IJTP9mMdeB/GRdH56lhXk5eSNpFM5TGtEVvAgOnUn17Lo99JfuBMOsfgFZUU4ecw==
+  dependencies:
+    tslib "^1.9.0"
+
 "@ngxs/devtools-plugin@^3.6.2":
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/@ngxs/devtools-plugin/-/devtools-plugin-3.6.2.tgz#aa0a4835f90fb905951d7712dc3ce508cbc15a2c"
@@ -5532,6 +5539,11 @@ mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1, mkdirp@~0.5.x:
   dependencies:
     minimist "0.0.8"
 
+modern-normalize@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/modern-normalize/-/modern-normalize-0.6.0.tgz#21a469988edfc7c9020348e7a3b5b3583a1c9406"
+  integrity sha512-gzvL1uFLV4EErHhaKoqTcrx52/sea6AIcMFWz/GBCuFrDBp485wSgyX5M+MZsj+grfcuqYLQGfHjDRrCvvwZLw==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -5608,6 +5620,11 @@ neo-async@^2.5.0, neo-async@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
+
+ngx-cookie-service@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/ngx-cookie-service/-/ngx-cookie-service-2.4.0.tgz#293de6d393220f8fe5712a4c9f724042404e6971"
+  integrity sha512-uR/6mCQ1t+XY5G1/irqRhoEddx1PPtmz7JHM/2nn5yQmicnj+n48x8C2PMxwaYDHKRh7QPQ9G5scR36Mmdz09A==
 
 ngx-quicklink@^0.2.0:
   version "0.2.0"

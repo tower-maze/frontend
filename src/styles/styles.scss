@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+@import 'variables';
+
+html,
+body {
+  min-height: calc(100vh - 8px);
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+  @extend .mat-app-background;
+}
+
+body {
+  font-family: 'Lexend Deca', 'Helvetica Neue', sans-serif;
+}
+
+@include mat-core($typography);
+@include angular-material-theme($theme);

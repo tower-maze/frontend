@@ -1,8 +1,8 @@
 <form [formGroup]="loginForm" class="login" (ngSubmit)="login()">
   <mat-form-field>
-    <input matInput type="text" formControlName="email" placeholder="Email" />
-    <mat-error *ngIf="email?.invalid && password?.touched">
-      Please enter your email
+    <input matInput type="text" formControlName="username" placeholder="Username" />
+    <mat-error *ngIf="username?.invalid && username?.touched">
+      Please enter your username
     </mat-error>
   </mat-form-field>
 

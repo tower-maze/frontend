@@ -7,15 +7,23 @@
     'controls controls controls';
 
   grid-template-rows: 56px 1fr 1fr 128px;
-  grid-template-columns: 304px 1fr 304px;
+  grid-template-columns: 1fr 2fr 1fr;
   grid-gap: 8px;
   margin: 8px;
 
-  height: calc(100vh - 16px);
+  min-height: calc(100vh - 16px);
+  min-width: calc(100vw - 16px);
 }
 
 .nav {
   grid-area: nav;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    margin: 0;
+  }
 }
 
 .chat {

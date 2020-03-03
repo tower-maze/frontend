@@ -1,48 +1,74 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
-import { SetAuthData } from './auth.actions';
+import { Register, Login, GetUser, Logout } from './auth.actions';
 
-export interface AuthenticationStateModel {
-  id: string;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  email: string;
-  roles: string[];
-}
+import { IUserModel } from '../../../models';
+import { environment } from '../../../../environments/environment';
 
-@State<AuthenticationStateModel>({
-  name: 'authStateModule',
-  defaults: {
-    id: '',
-    firstName: '',
-    lastName: '',
-    fullName: '',
-    email: '',
-    roles: []
-  }
+const defaults: IUserModel = {
+  pk: -1,
+  username: '',
+  email: '',
+  first_name: '',
+  last_name: ''
+};
+
+@State<IUserModel>({
+  name: 'authState',
+  defaults
 })
 @Injectable({ providedIn: 'root' })
-export class AuthStateModule {
+export class AuthState {
+  constructor(
+    private readonly ngZone: NgZone,
+    private readonly http: HttpClient,
+    private readonly router: Router
+  ) {}
+
   @Selector()
-  public static getAuthData(state: AuthenticationStateModel): AuthenticationStateModel {
-    return AuthStateModule.getInstanceState(state);
+  public static getAuthData(state: IUserModel): IUserModel {
+    return AuthState.getInstanceState(state);
   }
 
-  private static setInstanceState(state: AuthenticationStateModel): AuthenticationStateModel {
+  private static setInstanceState(state: IUserModel): IUserModel {
     return { ...state };
   }
 
-  private static getInstanceState(state: AuthenticationStateModel): AuthenticationStateModel {
+  private static getInstanceState(state: IUserModel): IUserModel {
     return { ...state };
   }
 
-  @Action(SetAuthData)
-  public setAuthData(
-    { setState }: StateContext<AuthenticationStateModel>,
-    { payload }: SetAuthData
-  ) {
-    setState(AuthStateModule.setInstanceState(payload));
+  private navigate(url: string) {
+    this.ngZone.run(() => this.router.navigateByUrl(url));
+  }
+
+  @Action(Login)
+  public async login(ctx: StateContext<IUserModel>, { payload }: Login) {
+    await this.http.post(`${environment.apiURL}/api/login/`, payload).toPromise();
+
+    this.navigate('/game');
+  }
+
+  @Action(Register)
+  public async register(ctx: StateContext<IUserModel>, { payload }: Register) {
+    await this.http.post(`${environment.apiURL}/api/registration/`, payload).toPromise();
+    this.navigate('/game');
+  }
+
+  @Action(GetUser)
+  public async getUser({ setState }: StateContext<IUserModel>) {
+    const user = await this.http.get<IUserModel>(`${environment.apiURL}/api/user/`).toPromise();
+    setState(AuthState.setInstanceState(user));
+  }
+
+  @Action(Logout)
+  public async logout({ setState }: StateContext<IUserModel>) {
+    await this.http.post(`${environment.apiURL}/api/logout/`, {}).toPromise();
+    setState(AuthState.setInstanceState(defaults));
+    this.navigate('/');
   }
 }

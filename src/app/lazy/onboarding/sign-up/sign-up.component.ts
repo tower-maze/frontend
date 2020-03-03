@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { Dispatch } from '@ngxs-labs/dispatch-decorator';
+import { Register } from '../../../shared/store/auth/auth.actions';
+
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
@@ -16,16 +19,17 @@ export class SignUpComponent implements OnInit {
     this.signUpForm = this.fb.group(
       {
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
+        username: ['', [Validators.required, Validators.minLength(6)]],
+        password1: ['', [Validators.required, Validators.minLength(6)]],
+        password2: ['', [Validators.required, Validators.minLength(6)]]
       },
       { validator: this.checkPasswords }
     );
   }
 
   public checkPasswords(group: FormGroup) {
-    const pass = group.get('password');
-    const confirmPass = group.get('confirmPassword');
+    const pass = group.get('password1');
+    const confirmPass = group.get('password2');
     const valid = pass?.value === confirmPass?.value ? null : { notSame: true };
     confirmPass?.setErrors(valid);
     return valid;
@@ -35,15 +39,18 @@ export class SignUpComponent implements OnInit {
     return this.signUpForm.get('email');
   }
 
+  public get username() {
+    return this.signUpForm.get('username');
+  }
+
   public get password() {
-    return this.signUpForm.get('password');
+    return this.signUpForm.get('password1');
   }
 
   public get confirmPassword() {
-    return this.signUpForm.get('confirmPassword');
+    return this.signUpForm.get('password2');
   }
 
-  public signUp() {
-    console.log(this.signUpForm);
-  }
+  @Dispatch()
+  public signUp = () => new Register(this.signUpForm.value);
 }
