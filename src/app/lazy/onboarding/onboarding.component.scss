@@ -2,33 +2,31 @@
 @import 'variables';
 
 .background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   margin: 0;
 
-  z-index: -10;
+  min-height: 100vh;
+  min-width: 100vw;
 
   background: linear-gradient(to top right, mat-color($accent), mat-color($primary));
 }
 
-:host {
+.background {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  padding: 10px 0;
 }
 
 header {
   color: white;
   margin-bottom: 36px;
   text-align: center;
+  overflow: hidden;
 
   h1 {
-    font-size: 56px;
+    font-size: 54px;
+    line-height: 54px;
   }
 }
 
@@ -58,5 +56,9 @@ mat-card.signup {
 
   .mat-tab-body-wrapper {
     height: 100%;
+  }
+
+  mat-tab-group .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
+    display: none;
   }
 }
