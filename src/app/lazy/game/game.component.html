@@ -11,8 +11,8 @@
   <p>Controls</p>
   <section>
     <button mat-button (click)="movePlayer('n')">North</button>
-    <button mat-button>South</button>
-    <button mat-button>East</button>
-    <button mat-button>West</button>
+    <button mat-button (click)="movePlayer('s')">South</button>
+    <button mat-button (click)="movePlayer('n')">East</button>
+    <button mat-button (click)="movePlayer('n')">West</button>
   </section>
 </mat-card>
