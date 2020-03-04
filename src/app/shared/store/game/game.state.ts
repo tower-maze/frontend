@@ -29,6 +29,11 @@ export class GameState {
     return GameState.getInstanceState(state).maze;
   }
 
+  @Selector()
+  public static getPlayerPosition(state: IGameModel) {
+    return GameState.getInstanceState(state).player;
+  }
+
   private static setInstanceState(state: IGameModel) {
     return { ...state };
   }
