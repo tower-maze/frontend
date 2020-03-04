@@ -119,8 +119,5 @@
       }
     }
   },
-  "defaultProject": "mud",
-  "cli": {
-    "analytics": "de0de083-89b4-402e-9c36-87ec59389370"
-  }
+  "defaultProject": "mud"
 }
