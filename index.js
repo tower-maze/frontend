@@ -50,8 +50,12 @@ function drawMaze() {
         if (connectionCount === 4) {
           mazeContext.drawImage(sprites, 16 * 14, 0, 16, 16, 16 * x, 16 * y, 16, 16);
         }
-        // if (room.id == mazeData.start_room) mazeContext.drawImage(sprites, 16 * 15, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-        // if (room.id == mazeData.exit_room) mazeContext.drawImage(sprites, 16 * 16, 0, 16, 16, 16 * x, 16 * y, 16, 16);
+        if (room.x == mazeData.startRoom.x && room.y == mazeData.startRoom.y) {
+          mazeContext.drawImage(sprites, 16 * 15, 0, 16, 16, 16 * x, 16 * y, 16, 16);
+        }
+        if (room.x == mazeData.exitRoom.x && room.y == mazeData.exitRoom.y) {
+          mazeContext.drawImage(sprites, 16 * 16, 0, 16, 16, 16 * x, 16 * y, 16, 16);
+        }
       }
     }
   }
