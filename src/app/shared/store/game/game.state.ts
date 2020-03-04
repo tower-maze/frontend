@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { GetPlayer, MovePlayer } from './game.actions';
-import { IGameModel, IPositionModel, IUpdatePositionModel } from '../../../models';
+import { GetMaze, GetPlayer, MovePlayer } from './game.actions';
+import { IGameModel, IMazeModel, IPositionModel, IUpdatePositionModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
 
 const defaults: IGameModel = {
-  player: { x: -1, y: -1, maze: -1 },
-  maze: []
+  player: undefined,
+  maze: undefined
 };
 
 @State<IGameModel>({
@@ -24,12 +24,30 @@ export class GameState {
     return GameState.getInstanceState(state);
   }
 
+  @Selector()
+  public static getMazeState(state: IGameModel) {
+    return GameState.getInstanceState(state).maze;
+  }
+
+  @Selector()
+  public static getPlayerPosition(state: IGameModel) {
+    return GameState.getInstanceState(state).player;
+  }
+
   private static setInstanceState(state: IGameModel) {
     return { ...state };
   }
 
   private static getInstanceState(state: IGameModel) {
     return { ...state };
+  }
+
+  @Action(GetMaze)
+  public async getMaze({ getState, setState }: StateContext<IGameModel>) {
+    const maze = await this.http.get<IMazeModel>(`${environment.apiURL}/api/adv/maze`).toPromise();
+
+    const state = getState();
+    setState(GameState.setInstanceState({ ...state, maze }));
   }
 
   @Action(GetPlayer)

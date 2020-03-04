@@ -1,4 +1,7 @@
 export interface IRoomModel {
-  x: number;
-  y: number;
+  id: number;
+  n: number;
+  s: number;
+  e: number;
+  w: number;
 }
