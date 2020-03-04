@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { GetMaze, GetPlayer, GetOtherPlayers, MovePlayer } from './game.actions';
-import { IGameModel, IMazeModel, IPositionModel } from '../../../models';
-import { environment } from '../../../../environments/environment';
-import { IOtherModel } from 'src/app/models/other.model';
 import { pluck } from 'rxjs/operators';
+
+import { GetMaze, GetPlayer, GetOtherPlayers, MovePlayer } from './game.actions';
+import { IGameModel, IMazeModel, IOtherModel, IPositionModel } from '../../../models';
+import { environment } from '../../../../environments/environment';
 
 const defaults: IGameModel = {
   player: undefined,
@@ -35,6 +34,11 @@ export class GameState {
   @Selector()
   public static getPlayerPosition(state: IGameModel) {
     return GameState.getInstanceState(state).player;
+  }
+
+  @Selector()
+  public static getOtherPlayerPosition(state: IGameModel) {
+    return GameState.getInstanceState(state).others;
   }
 
   private static setInstanceState(state: IGameModel) {
