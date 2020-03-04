@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { GetPlayer } from './game.actions';
-import { IGameModel, IPositionModel } from '../../../models';
+import { GetMaze, GetPlayer } from './game.actions';
+import { IGameModel, IMazeModel, IPositionModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
 
 const defaults: IGameModel = {
   player: { x: -1, y: -1, maze: -1 },
-  maze: []
+  maze: { title: '', rooms: [] }
 };
 
 @State<IGameModel>({
@@ -30,6 +30,16 @@ export class GameState {
 
   private static getInstanceState(state: IGameModel) {
     return { ...state };
+  }
+
+  @Action(GetMaze)
+  public async getMaze({ getState, setState }: StateContext<IGameModel>) {
+    const maze = await this.http
+      .get<IMazeModel>(`${environment.apiURL}/api/adv/maze`)
+      .toPromise();
+
+    const state = getState();
+    setState(GameState.setInstanceState({...state, maze }));
   }
 
   @Action(GetPlayer)

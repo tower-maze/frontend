@@ -1,3 +1,6 @@
 import { IRoomModel } from './room.model';
 
-export type IMazeModel = IRoomModel[][];
+export interface IMazeModel { 
+  title: string;
+  rooms: IRoomModel[][];
+};
