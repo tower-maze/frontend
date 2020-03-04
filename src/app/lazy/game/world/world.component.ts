@@ -48,7 +48,7 @@ export class WorldComponent implements OnInit, OnDestroy {
     sprites.src = 'assets/sprites.png';
 
     sprites.onload = () => {
-      const triggers$ = combineLatest(this.position$, this.others$);
+      const triggers$ = combineLatest([this.position$, this.others$]);
 
       this.movementSubscription = triggers$.subscribe(([playerPosition, others]) => {
         this.drawMaze(playerPosition, others, mazeContext, mazeData, sprites);
