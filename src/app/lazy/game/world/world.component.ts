@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-
-import { GetPlayer, GetMaze } from '../../../shared/store/game/game.actions';
-import { IMazeModel, IPositionModel } from '../../../models';
 import { Select, Store } from '@ngxs/store';
-import { GameState } from '../../../shared/store/game/game.state';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, combineLatest, interval } from 'rxjs';
 import { take } from 'rxjs/operators';
+
+import { IMazeModel, IOtherModel, IPositionModel } from '../../../models';
+import { GetPlayer, GetOtherPlayers, GetMaze } from '../../../shared/store/game/game.actions';
+import { GameState } from '../../../shared/store/game/game.state';
 
 @Component({
   selector: 'app-world',
@@ -14,6 +14,7 @@ import { take } from 'rxjs/operators';
 })
 export class WorldComponent implements OnInit, OnDestroy {
   private movementSubscription: Subscription;
+  private updateSubscription: Subscription;
 
   @ViewChild('maze', { static: true })
   private maze: ElementRef<HTMLCanvasElement>;
@@ -24,12 +25,20 @@ export class WorldComponent implements OnInit, OnDestroy {
   @Select(GameState.getPlayerPosition)
   public position$: Observable<IPositionModel>;
 
+  @Select(GameState.getOtherPlayerPosition)
+  public others$: Observable<IOtherModel[]>;
+
   constructor(private store: Store) {}
 
   @Override()
   public async ngOnInit() {
-    await this.store.dispatch(new GetPlayer()).toPromise();
-    await this.store.dispatch(new GetMaze()).toPromise();
+    const actions = [new GetPlayer(), new GetOtherPlayers(), new GetMaze()];
+    const promises = actions.map((action) => this.store.dispatch(action).toPromise());
+    await Promise.all(promises);
+
+    this.updateSubscription = interval(100).subscribe(() =>
+      this.store.dispatch(new GetOtherPlayers())
+    );
 
     const mazeContext = this.maze.nativeElement.getContext('2d');
     const mazeData = await this.maze$.pipe(take(1)).toPromise();
@@ -39,8 +48,10 @@ export class WorldComponent implements OnInit, OnDestroy {
     sprites.src = 'assets/sprites.png';
 
     sprites.onload = () => {
-      this.movementSubscription = this.position$.subscribe((playerPosition) => {
-        this.drawMaze(playerPosition, mazeContext, mazeData, sprites);
+      const triggers$ = combineLatest(this.position$, this.others$);
+
+      this.movementSubscription = triggers$.subscribe(([playerPosition, others]) => {
+        this.drawMaze(playerPosition, others, mazeContext, mazeData, sprites);
       });
     };
   }
@@ -48,10 +59,12 @@ export class WorldComponent implements OnInit, OnDestroy {
   @Override()
   public async ngOnDestroy() {
     this.movementSubscription?.unsubscribe();
+    this.updateSubscription?.unsubscribe();
   }
 
   private drawMaze(
     playerPosition: IPositionModel,
+    others: IOtherModel[],
     mazeContext: CanvasRenderingContext2D,
     mazeData: IMazeModel,
     sprites: HTMLImageElement
@@ -94,9 +107,12 @@ export class WorldComponent implements OnInit, OnDestroy {
           if (room.n && room.w && room.s)
             mazeContext.drawImage(sprites, 16 * 13, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
         }
-        if (connectionCount === 4) {
+        if (connectionCount === 4)
           mazeContext.drawImage(sprites, 16 * 14, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
-        }
+
+        if (others.some((otherPosition) => otherPosition.x === x && otherPosition.y === y))
+          mazeContext.drawImage(sprites, 16 * 18, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+
         if (room.id === mazeData.startRoom)
           mazeContext.drawImage(sprites, 16 * 15, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
         if (room.id === mazeData.exitRoom)
