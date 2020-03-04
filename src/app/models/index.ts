@@ -5,4 +5,5 @@ export * from './maze.model';
 export * from './position.model';
 export * from './register.model';
 export * from './room.model';
+export * from './update-position.model';
 export * from './user.model';

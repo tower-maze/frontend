@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { GetPlayer } from './game.actions';
-import { IGameModel, IPositionModel } from '../../../models';
+import { GetPlayer, MovePlayer } from './game.actions';
+import { IGameModel, IPositionModel, IUpdatePositionModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
 
 const defaults: IGameModel = {
@@ -40,5 +40,18 @@ export class GameState {
 
     const state = getState();
     setState(GameState.setInstanceState({ ...state, player }));
+  }
+
+  @Action(MovePlayer)
+  public async movePlayer(
+    { getState, setState }: StateContext<IGameModel>,
+    { payload }: MovePlayer
+  ) {
+    const { x, y } = await this.http
+      .post<IUpdatePositionModel>(`${environment.apiURL}/api/adv/move`, { direction: payload })
+      .toPromise();
+
+    const state = getState();
+    setState(GameState.setInstanceState({ ...state, player: { ...state.player, x, y } }));
   }
 }
