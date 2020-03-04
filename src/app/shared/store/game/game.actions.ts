@@ -8,6 +8,10 @@ export class GetPlayer {
   public static readonly type = '[Game] GetPlayer';
 }
 
+export class GetOtherPlayer {
+  public static readonly type = '[Game] GetOtherPlayer';
+}
+
 export class MovePlayer {
   public static readonly type = '[Auth] MovePlayer';
   constructor(public payload: Direction) {}
