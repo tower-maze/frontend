@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { GetMaze, GetPlayer } from './game.actions';
+import { GetMaze, GetPlayer, MovePlayer } from './game.actions';
 import { IGameModel, IMazeModel, IPositionModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
 
@@ -58,5 +58,23 @@ export class GameState {
 
     const state = getState();
     setState(GameState.setInstanceState({ ...state, player }));
+  }
+
+  @Action(MovePlayer)
+  public async movePlayer(
+    { getState, setState }: StateContext<IGameModel>,
+    { payload }: MovePlayer
+  ) {
+    const { maze, x, y } = await this.http
+      .post<IPositionModel>(`${environment.apiURL}/api/adv/move`, { direction: payload })
+      .toPromise();
+
+    const state = getState();
+    setState(
+      GameState.setInstanceState({
+        ...state,
+        player: { ...state.player, maze, x, y }
+      })
+    );
   }
 }
