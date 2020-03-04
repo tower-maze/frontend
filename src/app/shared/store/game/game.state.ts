@@ -7,8 +7,8 @@ import { IGameModel, IMazeModel, IPositionModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
 
 const defaults: IGameModel = {
-  player: { x: -1, y: -1, maze: -1 },
-  maze: { title: '', rooms: [] }
+  player: undefined,
+  maze: undefined
 };
 
 @State<IGameModel>({
@@ -24,6 +24,11 @@ export class GameState {
     return GameState.getInstanceState(state);
   }
 
+  @Selector()
+  public static getMazeState(state: IGameModel) {
+    return GameState.getInstanceState(state).maze;
+  }
+
   private static setInstanceState(state: IGameModel) {
     return { ...state };
   }
@@ -34,12 +39,10 @@ export class GameState {
 
   @Action(GetMaze)
   public async getMaze({ getState, setState }: StateContext<IGameModel>) {
-    const maze = await this.http
-      .get<IMazeModel>(`${environment.apiURL}/api/adv/maze`)
-      .toPromise();
+    const maze = await this.http.get<IMazeModel>(`${environment.apiURL}/api/adv/maze`).toPromise();
 
     const state = getState();
-    setState(GameState.setInstanceState({...state, maze }));
+    setState(GameState.setInstanceState({ ...state, maze }));
   }
 
   @Action(GetPlayer)
