@@ -1,6 +1,8 @@
-# Mud
+# Tower Maze
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.2.
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/26dcf02d-ef53-425f-a176-3ce3f13d6ce1/deploy-status)](https://app.netlify.com/sites/tower-maze/deploys)
 
 ## Development server
 
