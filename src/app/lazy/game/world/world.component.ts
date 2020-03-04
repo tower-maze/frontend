@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 
-import { GetPlayer, GetMaze } from '../../../shared/store/game/game.actions';
+import { GetPlayer, GetOtherPlayers, GetMaze } from '../../../shared/store/game/game.actions';
 import { IMazeModel, IPositionModel } from '../../../models';
 import { Select, Store } from '@ngxs/store';
 import { GameState } from '../../../shared/store/game/game.state';
@@ -28,8 +28,9 @@ export class WorldComponent implements OnInit, OnDestroy {
 
   @Override()
   public async ngOnInit() {
-    await this.store.dispatch(new GetPlayer()).toPromise();
-    await this.store.dispatch(new GetMaze()).toPromise();
+    const actions = [new GetPlayer(), new GetOtherPlayers(), new GetMaze()];
+    const promises = actions.map((action) => this.store.dispatch(action).toPromise());
+    await Promise.all(promises);
 
     const mazeContext = this.maze.nativeElement.getContext('2d');
     const mazeData = await this.maze$.pipe(take(1)).toPromise();

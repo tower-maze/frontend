@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { GetMaze, GetPlayer, GetOtherPlayer, MovePlayer } from './game.actions';
+import { GetMaze, GetPlayer, GetOtherPlayers, MovePlayer } from './game.actions';
 import { IGameModel, IMazeModel, IPositionModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
+import { IOtherModel } from 'src/app/models/other.model';
+import { pluck } from 'rxjs/operators';
 
 const defaults: IGameModel = {
   player: undefined,
-  maze: undefined
+  maze: undefined,
+  others: undefined
 };
 
 @State<IGameModel>({
@@ -44,7 +47,7 @@ export class GameState {
 
   @Action(GetMaze)
   public async getMaze({ getState, setState }: StateContext<IGameModel>) {
-    const maze = await this.http.get<IMazeModel>(`${environment.apiURL}/api/adv/maze`).toPromise();
+    const maze = await this.http.get<IMazeModel>(`${environment.apiURL}/api/adv/maze/`).toPromise();
 
     const state = getState();
     setState(GameState.setInstanceState({ ...state, maze }));
@@ -53,21 +56,22 @@ export class GameState {
   @Action(GetPlayer)
   public async getPlayer({ getState, setState }: StateContext<IGameModel>) {
     const player = await this.http
-      .get<IPositionModel>(`${environment.apiURL}/api/adv/init`)
+      .get<IPositionModel>(`${environment.apiURL}/api/adv/init/`)
       .toPromise();
 
     const state = getState();
     setState(GameState.setInstanceState({ ...state, player }));
   }
 
-  @Action(GetOtherPlayer)
-  public async getOtherPlayer({ getState, setState }: StateContext<IGameModel>) {
-    const player = await this.http
-      .get<IPositionModel>(`${environment.apiURL}/api/adv/init`)
+  @Action(GetOtherPlayers)
+  public async getOtherPlayers({ getState, setState }: StateContext<IGameModel>) {
+    const others = await this.http
+      .get<{ others: IOtherModel[] }>(`${environment.apiURL}/api/adv/others/`)
+      .pipe(pluck('others'))
       .toPromise();
 
     const state = getState();
-    setState(GameState.setInstanceState({ ...state, player }));
+    setState(GameState.setInstanceState({ ...state, others }));
   }
 
   @Action(MovePlayer)
@@ -76,7 +80,7 @@ export class GameState {
     { payload }: MovePlayer
   ) {
     const { maze, x, y } = await this.http
-      .post<IPositionModel>(`${environment.apiURL}/api/adv/move`, { direction: payload })
+      .post<IPositionModel>(`${environment.apiURL}/api/adv/move/`, { direction: payload })
       .toPromise();
 
     const state = getState();
