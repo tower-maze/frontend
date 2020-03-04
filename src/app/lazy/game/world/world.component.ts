@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subscription, merge, combineLatest, interval } from 'rxjs';
+import { Observable, Subscription, combineLatest, interval } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { IMazeModel, IOtherModel, IPositionModel } from '../../../models';
