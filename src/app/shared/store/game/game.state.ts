@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { GetMaze, GetPlayer, MovePlayer } from './game.actions';
-import { IGameModel, IMazeModel, IPositionModel, IUpdatePositionModel } from '../../../models';
+import { IGameModel, IMazeModel, IPositionModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
 
 const defaults: IGameModel = {
@@ -65,11 +65,16 @@ export class GameState {
     { getState, setState }: StateContext<IGameModel>,
     { payload }: MovePlayer
   ) {
-    const { x, y } = await this.http
-      .post<IUpdatePositionModel>(`${environment.apiURL}/api/adv/move`, { direction: payload })
+    const { maze, x, y } = await this.http
+      .post<IPositionModel>(`${environment.apiURL}/api/adv/move`, { direction: payload })
       .toPromise();
 
     const state = getState();
-    setState(GameState.setInstanceState({ ...state, player: { ...state.player, x, y } }));
+    setState(
+      GameState.setInstanceState({
+        ...state,
+        player: { ...state.player, maze, x, y }
+      })
+    );
   }
 }
