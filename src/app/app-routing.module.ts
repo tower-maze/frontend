@@ -4,6 +4,7 @@ import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 
 import { AuthGuard } from './shared/guards/auth/auth.guard';
 import { PublicGuard } from './shared/guards/auth/public.guard';
+import { UserResolver } from './shared/resolvers/user/user.resolver';
 
 const routes: Routes = [
   {
@@ -15,6 +16,9 @@ const routes: Routes = [
   {
     path: 'game',
     canActivate: [AuthGuard],
+    resolve: {
+      user: UserResolver
+    },
     loadChildren: () => import('./lazy/game/game.module').then((m) => m.GameModule)
   },
   { path: '**', redirectTo: '' }
