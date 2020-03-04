@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subscription, merge, combineLatest } from 'rxjs';
+import { Observable, Subscription, merge, combineLatest, interval } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { IMazeModel, IOtherModel, IPositionModel } from '../../../models';
@@ -14,6 +14,7 @@ import { GameState } from '../../../shared/store/game/game.state';
 })
 export class WorldComponent implements OnInit, OnDestroy {
   private movementSubscription: Subscription;
+  private updateSubscription: Subscription;
 
   @ViewChild('maze', { static: true })
   private maze: ElementRef<HTMLCanvasElement>;
@@ -35,6 +36,10 @@ export class WorldComponent implements OnInit, OnDestroy {
     const promises = actions.map((action) => this.store.dispatch(action).toPromise());
     await Promise.all(promises);
 
+    this.updateSubscription = interval(100).subscribe(() =>
+      this.store.dispatch(new GetOtherPlayers())
+    );
+
     const mazeContext = this.maze.nativeElement.getContext('2d');
     const mazeData = await this.maze$.pipe(take(1)).toPromise();
 
@@ -43,7 +48,7 @@ export class WorldComponent implements OnInit, OnDestroy {
     sprites.src = 'assets/sprites.png';
 
     sprites.onload = () => {
-      const triggers$ = combineLatest(this.position$, this.others$)
+      const triggers$ = combineLatest(this.position$, this.others$);
 
       this.movementSubscription = triggers$.subscribe(([playerPosition, others]) => {
         this.drawMaze(playerPosition, others, mazeContext, mazeData, sprites);
@@ -54,6 +59,7 @@ export class WorldComponent implements OnInit, OnDestroy {
   @Override()
   public async ngOnDestroy() {
     this.movementSubscription?.unsubscribe();
+    this.updateSubscription?.unsubscribe();
   }
 
   private drawMaze(
@@ -104,7 +110,7 @@ export class WorldComponent implements OnInit, OnDestroy {
         if (connectionCount === 4)
           mazeContext.drawImage(sprites, 16 * 14, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
 
-        if (others.some(otherPosition => otherPosition.x === x && otherPosition.y === y))
+        if (others.some((otherPosition) => otherPosition.x === x && otherPosition.y === y))
           mazeContext.drawImage(sprites, 16 * 18, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
 
         if (room.id === mazeData.startRoom)
