@@ -2,6 +2,14 @@
   position: relative;
 }
 
+h1 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  background-color: rgba($color: white, $alpha: 0.67);
+}
+
 canvas {
   position: absolute;
   height: 100%;
