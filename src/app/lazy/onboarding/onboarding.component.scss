@@ -61,4 +61,10 @@ mat-card.signup {
   mat-tab-group .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
     display: none;
   }
+
+  .mat-tab-body-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
