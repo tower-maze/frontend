@@ -19,7 +19,7 @@ export class ErrorComponent implements OnInit, OnDestroy {
   public error$: Observable<string>;
 
   private snackBarSubscription: Subscription;
-  private actionSubscription: Subscription;
+  private dismissSubscription: Subscription;
 
   @Dispatch()
   public setError = (error: string) => new SetError(error);
@@ -27,12 +27,12 @@ export class ErrorComponent implements OnInit, OnDestroy {
   @Override()
   public ngOnInit() {
     this.snackBarSubscription = this.error$.pipe(filter((error) => !!error)).subscribe((error) => {
-      this.actionSubscription = this.snackBar
+      this.dismissSubscription = this.snackBar
         .open(error, 'Close', {
           duration: 3000,
           panelClass: ['error-message']
         })
-        .onAction()
+        .afterDismissed()
         .subscribe(() => this.setError(''));
     });
   }
@@ -40,6 +40,6 @@ export class ErrorComponent implements OnInit, OnDestroy {
   @Override()
   public ngOnDestroy() {
     this.snackBarSubscription.unsubscribe();
-    this.actionSubscription.unsubscribe();
+    this.dismissSubscription.unsubscribe();
   }
 }
