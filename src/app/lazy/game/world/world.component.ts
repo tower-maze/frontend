@@ -38,7 +38,7 @@ export class WorldComponent implements OnInit, OnDestroy {
     const promises = actions.map((action) => this.store.dispatch(action).toPromise());
     await Promise.all(promises);
 
-    this.subscriptions.sink = interval(500).subscribe(() =>
+    this.subscriptions.sink = combineLatest([interval(500), this.maze$]).subscribe(() =>
       this.store.dispatch(new GetOtherPlayers())
     );
 
