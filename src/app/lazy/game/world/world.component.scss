@@ -1,21 +1,5 @@
-:host {
-  display: grid;
-}
-
 canvas {
-  width: 45%;
-}
-
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen and (min-width : 320px) and (max-width : 480px) {
-  canvas {
-    width: 100%;
-  }
-}
-
-/* iPads (portrait) ----------- */
-@media only screen and (min-width : 768px) and (max-width : 1024px) and (orientation : portrait) {
-  canvas {
-    width: 100%;
-  }  
+  height: 100%;
+  max-height: min(100%, 1024px, 90vw);
+  max-width: min(100%, 1024px, 90vh);
 }

@@ -6,13 +6,18 @@
     'world     world    world'
     'controls controls controls';
 
-  grid-template-rows: 56px 1fr 1fr 128px;
+  grid-template-rows: 56px 1fr 1fr 64px;
   grid-template-columns: 1fr 2fr 1fr;
   grid-gap: 8px;
   margin: 8px;
 
   min-height: calc(100vh - 16px);
   min-width: calc(100vw - 16px);
+  max-height: 100vh;
+
+  @media screen and (max-width: 420px) {
+    grid-template-rows: 56px 1fr 1fr 128px;
+  }
 }
 
 .nav {
@@ -62,6 +67,7 @@ mat-card {
   grid-area: controls;
   section {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
   }
