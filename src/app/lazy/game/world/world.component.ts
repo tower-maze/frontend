@@ -111,12 +111,11 @@ export class WorldComponent implements OnInit, OnDestroy {
     playerPosition,
     others
   ]: [IMazeModel, IPositionModel, IOtherModel[]]) => {
-    console.log('render');
     context.clearRect(0, 0, 512, 512);
 
     for (let y = 0; y < 32; y++) {
       for (let x = 0; x < 32; x++) {
-        if (others?.some((otherPosition) => otherPosition.x === x && otherPosition.y === y))
+        if (others.some((otherPosition) => otherPosition.x === x && otherPosition.y === y))
           context.drawImage(...this.getSprite(sprites, 18, x, y));
 
         if (x === mazeData.startRoom.x && y === mazeData.startRoom.y)
