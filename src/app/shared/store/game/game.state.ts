@@ -84,15 +84,15 @@ export class GameState {
     { getState, setState }: StateContext<IGameModel>,
     { payload }: MovePlayer
   ) {
-    const player = await this.http
-      .post<IPositionModel>(`${environment.apiURL}/api/adv/move/`, { direction: payload })
+    const { player, nextMaze } = await this.http
+      .post<IMoveModel>(`${environment.apiURL}/api/adv/move/`, { direction: payload })
       .toPromise();
 
     const state = getState();
     setState(
       GameState.setInstanceState({
         ...state,
-        // maze: next_maze || state.maze,
+        maze: nextMaze || state.maze,
         player: { ...state.player, ...player }
       })
     );
