@@ -9,9 +9,17 @@
 
 <mat-card class="controls mat-elevation-z8">
   <section>
-    <button mat-button (click)="movePlayer('n')">&#x2191; North &#x2191;</button>
-    <button mat-button (click)="movePlayer('s')">&#x2193; South &#x2193;</button>
-    <button mat-button (click)="movePlayer('e')">&#x2192; East &#x2192;</button>
-    <button mat-button (click)="movePlayer('w')">&#x2190; West &#x2190;</button>
+    <button mat-button (click)="movePlayer('w')">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <button mat-button (click)="movePlayer('n')">
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+    <button mat-button (click)="movePlayer('s')">
+      <mat-icon>arrow_downward</mat-icon>
+    </button>
+    <button mat-button (click)="movePlayer('e')">
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
   </section>
 </mat-card>
