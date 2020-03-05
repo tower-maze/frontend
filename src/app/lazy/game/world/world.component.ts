@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subscription, combineLatest, interval } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, combineLatest, interval } from 'rxjs';
+import { SubSink } from 'subsink';
 
 import { IMazeModel, IOtherModel, IPositionModel } from '../../../models';
 import { GetPlayer, GetOtherPlayers, GetMaze } from '../../../shared/store/game/game.actions';
@@ -13,11 +13,13 @@ import { GameState } from '../../../shared/store/game/game.state';
   styleUrls: ['./world.component.scss']
 })
 export class WorldComponent implements OnInit, OnDestroy {
-  private movementSubscription: Subscription;
-  private updateSubscription: Subscription;
+  private subscriptions = new SubSink();
 
   @ViewChild('maze', { static: true })
-  private maze: ElementRef<HTMLCanvasElement>;
+  private mazeCanvas: ElementRef<HTMLCanvasElement>;
+
+  @ViewChild('players', { static: true })
+  private playersCanvas: ElementRef<HTMLCanvasElement>;
 
   @Select(GameState.getMazeState)
   public maze$: Observable<IMazeModel>;
@@ -36,89 +38,83 @@ export class WorldComponent implements OnInit, OnDestroy {
     const promises = actions.map((action) => this.store.dispatch(action).toPromise());
     await Promise.all(promises);
 
-    this.updateSubscription = interval(500).subscribe(() =>
+    this.subscriptions.sink = combineLatest([interval(500), this.maze$]).subscribe(() =>
       this.store.dispatch(new GetOtherPlayers())
     );
 
-    const mazeContext = this.maze.nativeElement.getContext('2d');
-    const mazeData = await this.maze$.pipe(take(1)).toPromise();
+    const mazeContext = this.mazeCanvas.nativeElement.getContext('2d');
+    const playersContext = this.playersCanvas.nativeElement.getContext('2d');
+    if (!mazeContext || !playersContext) throw new Error('Could not find maze');
 
-    if (!mazeContext) throw new Error('Could not find maze');
     const sprites = new Image();
     sprites.src = 'assets/sprites.png';
+    await sprites.decode();
 
-    sprites.onload = () => {
-      const triggers$ = combineLatest([this.position$, this.others$]);
-
-      this.movementSubscription = triggers$.subscribe(([playerPosition, others]) => {
-        this.drawMaze(playerPosition, others, mazeContext, mazeData, sprites);
-      });
-    };
+    const triggers$ = combineLatest([this.maze$, this.position$, this.others$]);
+    this.subscriptions.sink = triggers$.subscribe(this.drawPlayers(playersContext, sprites));
+    this.subscriptions.sink = this.maze$.subscribe(this.drawMaze(mazeContext, sprites));
   }
 
   @Override()
   public async ngOnDestroy() {
-    this.movementSubscription?.unsubscribe();
-    this.updateSubscription?.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
-  private drawMaze(
-    playerPosition: IPositionModel,
-    others: IOtherModel[],
-    mazeContext: CanvasRenderingContext2D,
-    mazeData: IMazeModel,
-    sprites: HTMLImageElement
-  ) {
+  private getSprite(
+    sprites: HTMLImageElement,
+    sprite: number,
+    x: number,
+    y: number
+  ): Parameters<CanvasRenderingContext2D['drawImage']> {
+    return [sprites, 16 * sprite, 0, 16, 16, 16 * x, 16 * y, 16, 16];
+  }
+
+  private drawMaze = (context: CanvasRenderingContext2D, sprites: HTMLImageElement) => (
+    mazeData: IMazeModel
+  ) => {
+    context.clearRect(0, 0, 512, 512);
+
     for (let y = 0; y < 32; y++) {
       for (let x = 0; x < 32; x++) {
         const room = mazeData.rooms[y][x];
-        const connectionCount = room.n + room.e + room.s + room.w;
-        if (connectionCount === 1) {
-          if (room.n) mazeContext.drawImage(sprites, 16 * 0, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.e) mazeContext.drawImage(sprites, 16 * 1, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.s) mazeContext.drawImage(sprites, 16 * 2, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.w) mazeContext.drawImage(sprites, 16 * 3, 0, 16, 16, 16 * x, 16 * y, 16, 16);
+        switch (room.n + room.e + room.s + room.w) {
+          case 1:
+            if (room.n) context.drawImage(...this.getSprite(sprites, 0, x, y));
+            if (room.e) context.drawImage(...this.getSprite(sprites, 1, x, y));
+            if (room.s) context.drawImage(...this.getSprite(sprites, 2, x, y));
+            if (room.w) context.drawImage(...this.getSprite(sprites, 3, x, y));
+            break;
+          case 2:
+            if (room.n && room.s) context.drawImage(...this.getSprite(sprites, 4, x, y));
+            if (room.e && room.w) context.drawImage(...this.getSprite(sprites, 5, x, y));
+            if (room.s && room.e) context.drawImage(...this.getSprite(sprites, 6, x, y));
+            if (room.e && room.n) context.drawImage(...this.getSprite(sprites, 7, x, y));
+            if (room.n && room.w) context.drawImage(...this.getSprite(sprites, 8, x, y));
+            if (room.s && room.w) context.drawImage(...this.getSprite(sprites, 9, x, y));
+            break;
+          case 3:
+            if (room.w && room.s && room.e) context.drawImage(...this.getSprite(sprites, 10, x, y));
+            if (room.s && room.e && room.n) context.drawImage(...this.getSprite(sprites, 11, x, y));
+            if (room.e && room.n && room.w) context.drawImage(...this.getSprite(sprites, 12, x, y));
+            if (room.n && room.w && room.s) context.drawImage(...this.getSprite(sprites, 13, x, y));
+            break;
+          case 4:
+            context.drawImage(...this.getSprite(sprites, 14, x, y));
+            break;
         }
-        if (connectionCount === 2) {
-          if (room.n && room.s)
-            mazeContext.drawImage(sprites, 16 * 4, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.e && room.w)
-            mazeContext.drawImage(sprites, 16 * 5, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.s && room.e)
-            mazeContext.drawImage(sprites, 16 * 6, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.e && room.n)
-            mazeContext.drawImage(sprites, 16 * 7, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.n && room.w)
-            mazeContext.drawImage(sprites, 16 * 8, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.s && room.w)
-            mazeContext.drawImage(sprites, 16 * 9, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-        }
-        if (connectionCount === 3) {
-          if (room.w && room.s && room.e)
-            mazeContext.drawImage(sprites, 16 * 10, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.s && room.e && room.n)
-            mazeContext.drawImage(sprites, 16 * 11, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.e && room.n && room.w)
-            mazeContext.drawImage(sprites, 16 * 12, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-          if (room.n && room.w && room.s)
-            mazeContext.drawImage(sprites, 16 * 13, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-        }
-        if (connectionCount === 4) {
-          mazeContext.drawImage(sprites, 16 * 14, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-        }
-
-        if (others?.some((otherPosition) => otherPosition.x === x && otherPosition.y === y))
-          mazeContext.drawImage(sprites, 16 * 18, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-
-        if (x === mazeData.startRoom.x && y === mazeData.startRoom.y)
-          mazeContext.drawImage(sprites, 16 * 15, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-
-        if (x === mazeData.exitRoom.x && y === mazeData.exitRoom.y)
-          mazeContext.drawImage(sprites, 16 * 16, 0, 16, 16, 16 * x, 16 * y, 16, 16);
-
-        if (playerPosition.x === x && playerPosition.y === y)
-          mazeContext.drawImage(sprites, 16 * 17, 0, 16, 16, 16 * x, 16 * y, 16, 16);
       }
     }
-  }
+  };
+
+  private drawPlayers = (context: CanvasRenderingContext2D, sprites: HTMLImageElement) => ([
+    mazeData,
+    playerPosition,
+    others
+  ]: [IMazeModel, IPositionModel, IOtherModel[]]) => {
+    context.clearRect(0, 0, 512, 512);
+    others.forEach((other) => context.drawImage(...this.getSprite(sprites, 18, other.x, other.y)));
+    context.drawImage(...this.getSprite(sprites, 15, mazeData.startRoom.x, mazeData.startRoom.y));
+    context.drawImage(...this.getSprite(sprites, 16, mazeData.exitRoom.x, mazeData.exitRoom.y));
+    context.drawImage(...this.getSprite(sprites, 17, playerPosition.x, playerPosition.y));
+  };
 }
