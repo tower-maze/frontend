@@ -31,18 +31,18 @@ header {
 }
 
 mat-card {
-  width: 600px;
+  width: 320px;
   max-width: 90%;
   margin: 5px;
   transition: height 0.5s ease-in-out;
 }
 
 mat-card.login {
-  height: 255px;
+  height: 300px;
 }
 
 mat-card.signup {
-  height: 385px;
+  height: 450px;
 }
 
 ::ng-deep {

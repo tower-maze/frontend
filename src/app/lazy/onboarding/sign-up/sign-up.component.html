@@ -1,35 +1,39 @@
 <form [formGroup]="signUpForm" class="signup" (ngSubmit)="signUp()">
-  <mat-form-field>
-    <input matInput type="text" formControlName="email" placeholder="Email" />
-    <mat-error *ngIf="email?.invalid && email?.touched">
-      Please enter your email
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
-    <input matInput type="text" formControlName="username" placeholder="Username" />
-    <mat-error *ngIf="username?.invalid && username?.touched">
+  <mat-form-field appearance="fill" floatLabel="always">
+    <mat-label>Username</mat-label>
+    <input matInput type="text" formControlName="username" />
+    <mat-error *ngIf="username?.invalid">
       Please enter your username
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
-    <input matInput type="password" formControlName="password1" placeholder="Password" />
-    <mat-error *ngIf="password?.errors?.required && password?.touched">
+  <mat-form-field appearance="fill" floatLabel="always">
+    <mat-label>Email</mat-label>
+    <input matInput type="text" formControlName="email" />
+    <mat-error *ngIf="email?.invalid">
+      Please enter your email
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" floatLabel="always">
+    <mat-label>Password</mat-label>
+    <input matInput type="password" formControlName="password1" />
+    <mat-error *ngIf="password?.invalid && password?.errors?.required">
       Please enter your password
     </mat-error>
 
-    <mat-error *ngIf="password?.errors?.minlength && password?.touched">
+    <mat-error *ngIf="password?.invalid && password?.errors?.minlength">
       Please enter at least 6 characters
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
-    <input matInput type="password" formControlName="password2" placeholder="Confirm Password" />
-    <mat-error *ngIf="confirmPassword?.invalid && password?.touched">
+  <mat-form-field appearance="fill" floatLabel="always">
+    <mat-label>Confirm Password</mat-label>
+    <input matInput type="password" formControlName="password2" />
+    <mat-error *ngIf="confirmPassword?.invalid">
       Your password does not match
     </mat-error>
   </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit">Signup</button>
+  <button mat-button color="primary" type="submit">Signup</button>
 </form>
