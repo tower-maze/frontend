@@ -1,4 +1,9 @@
+:host {
+  position: relative;
+}
+
 canvas {
+  position: absolute;
   height: 100%;
   max-height: min(100%, 1024px, 90vw);
   max-width: min(100%, 1024px, 90vh);
