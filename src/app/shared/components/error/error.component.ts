@@ -30,7 +30,8 @@ export class ErrorComponent implements OnInit, OnDestroy {
       this.dismissSubscription = this.snackBar
         .open(error, 'Close', {
           duration: 3000,
-          panelClass: ['error-message']
+          panelClass: ['error-message'],
+          horizontalPosition: 'end'
         })
         .afterDismissed()
         .subscribe(() => this.setError());
