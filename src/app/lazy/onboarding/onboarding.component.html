@@ -1,10 +1,13 @@
 <div class="background">
   <header>
-    <h1>Welcome to [name]</h1>
-    <div>[graphic]</div>
+    <h1>Tower Maze</h1>
   </header>
 
-  <mat-card class="prompt mat-elevation-z8" [ngClass]="selectedTab === 0 ? 'login' : 'signup'">
+  <mat-card
+    [@error]="(error$ | async) ? 'error' : null"
+    class="prompt mat-elevation-z8"
+    [ngClass]="selectedTab === 0 ? 'login' : 'signup'"
+  >
     <mat-tab-group
       mat-align-tabs="center"
       disablePagination
@@ -12,12 +15,14 @@
       (selectedIndexChange)="selectedTab = $event"
     >
       <mat-tab label="Login">
-        <app-login></app-login>
+        <app-login *ngIf="!(loading$ | async); else loading"></app-login>
       </mat-tab>
 
       <mat-tab label="Signup">
-        <app-sign-up></app-sign-up>
+        <app-sign-up *ngIf="!(loading$ | async); else loading"></app-sign-up>
       </mat-tab>
+
+      <ng-template #loading><mat-spinner diameter="64"></mat-spinner></ng-template>
     </mat-tab-group>
   </mat-card>
 </div>
