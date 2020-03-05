@@ -1,4 +1,5 @@
 export * from './direction.model';
+export * from './error.model';
 export * from './game.model';
 export * from './login.model';
 export * from './key-room.model';
