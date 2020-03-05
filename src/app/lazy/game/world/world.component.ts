@@ -50,7 +50,7 @@ export class WorldComponent implements OnInit, OnDestroy {
     sprites.src = 'assets/sprites.png';
     await sprites.decode();
 
-    const triggers$ = combineLatest([this.position$, this.others$]);
+    const triggers$ = combineLatest([this.maze$, this.position$, this.others$]);
     this.subscriptions.sink = triggers$.subscribe(this.drawPlayers(playersContext, sprites));
     this.subscriptions.sink = this.maze$.subscribe(this.drawMaze(mazeContext, sprites));
   }
@@ -102,20 +102,15 @@ export class WorldComponent implements OnInit, OnDestroy {
             context.drawImage(...this.getSprite(sprites, 14, x, y));
             break;
         }
-
-        if (x === mazeData.startRoom.x && y === mazeData.startRoom.y)
-          context.drawImage(...this.getSprite(sprites, 15, x, y));
-
-        if (x === mazeData.exitRoom.x && y === mazeData.exitRoom.y)
-          context.drawImage(...this.getSprite(sprites, 16, x, y));
       }
     }
   };
 
   private drawPlayers = (context: CanvasRenderingContext2D, sprites: HTMLImageElement) => ([
+    mazeData,
     playerPosition,
     others
-  ]: [IPositionModel, IOtherModel[]]) => {
+  ]: [IMazeModel, IPositionModel, IOtherModel[]]) => {
     console.log('render');
     context.clearRect(0, 0, 512, 512);
 
@@ -123,6 +118,12 @@ export class WorldComponent implements OnInit, OnDestroy {
       for (let x = 0; x < 32; x++) {
         if (others?.some((otherPosition) => otherPosition.x === x && otherPosition.y === y))
           context.drawImage(...this.getSprite(sprites, 18, x, y));
+
+        if (x === mazeData.startRoom.x && y === mazeData.startRoom.y)
+          context.drawImage(...this.getSprite(sprites, 15, x, y));
+
+        if (x === mazeData.exitRoom.x && y === mazeData.exitRoom.y)
+          context.drawImage(...this.getSprite(sprites, 16, x, y));
 
         if (playerPosition.x === x && playerPosition.y === y)
           context.drawImage(...this.getSprite(sprites, 17, x, y));
