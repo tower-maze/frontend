@@ -1,10 +1,13 @@
 <div class="background">
   <header>
-    <h1>Welcome to [name]</h1>
-    <div>[graphic]</div>
+    <h1>Tower Maze</h1>
   </header>
 
-  <mat-card class="prompt mat-elevation-z8" [ngClass]="selectedTab === 0 ? 'login' : 'signup'">
+  <mat-card
+    [@error]="(error$ | async) ? 'error' : null"
+    class="prompt mat-elevation-z8"
+    [ngClass]="selectedTab === 0 ? 'login' : 'signup'"
+  >
     <mat-tab-group
       mat-align-tabs="center"
       disablePagination

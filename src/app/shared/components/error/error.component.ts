@@ -22,7 +22,7 @@ export class ErrorComponent implements OnInit, OnDestroy {
   private dismissSubscription: Subscription;
 
   @Dispatch()
-  public setError = (error: string) => new SetError(error);
+  public setError = (error?: string) => new SetError(error);
 
   @Override()
   public ngOnInit() {
@@ -33,7 +33,7 @@ export class ErrorComponent implements OnInit, OnDestroy {
           panelClass: ['error-message']
         })
         .afterDismissed()
-        .subscribe(() => this.setError(''));
+        .subscribe(() => this.setError());
     });
   }
 
