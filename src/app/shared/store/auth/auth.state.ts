@@ -18,7 +18,7 @@ const defaults: IUserModel = {
 };
 
 @State<IUserModel>({
-  name: 'authState',
+  name: 'auth',
   defaults
 })
 @Injectable({ providedIn: 'root' })
