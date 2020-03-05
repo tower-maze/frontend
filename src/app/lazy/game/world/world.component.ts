@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable, combineLatest, interval } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { SubSink } from 'subsink';
 
 import { IMazeModel, IOtherModel, IPositionModel } from '../../../models';
@@ -37,10 +37,6 @@ export class WorldComponent implements OnInit, OnDestroy {
     const actions = [new GetPlayer(), new GetOtherPlayers(), new GetMaze()];
     const promises = actions.map((action) => this.store.dispatch(action).toPromise());
     await Promise.all(promises);
-
-    this.subscriptions.sink = combineLatest([interval(500), this.maze$]).subscribe(() =>
-      this.store.dispatch(new GetOtherPlayers())
-    );
 
     const mazeContext = this.mazeCanvas.nativeElement.getContext('2d');
     const playersContext = this.playersCanvas.nativeElement.getContext('2d');
@@ -112,7 +108,7 @@ export class WorldComponent implements OnInit, OnDestroy {
     others
   ]: [IMazeModel, IPositionModel, IOtherModel[]]) => {
     context.clearRect(0, 0, 512, 512);
-    others.forEach((other) => context.drawImage(...this.getSprite(sprites, 18, other.x, other.y)));
+    others?.forEach((other) => context.drawImage(...this.getSprite(sprites, 18, other.x, other.y)));
     context.drawImage(...this.getSprite(sprites, 15, mazeData.startRoom.x, mazeData.startRoom.y));
     context.drawImage(...this.getSprite(sprites, 16, mazeData.exitRoom.x, mazeData.exitRoom.y));
     context.drawImage(...this.getSprite(sprites, 17, playerPosition.x, playerPosition.y));
