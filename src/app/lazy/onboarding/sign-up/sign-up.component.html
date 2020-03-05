@@ -1,5 +1,5 @@
 <form [formGroup]="signUpForm" class="signup" (ngSubmit)="signUp()">
-  <mat-form-field appearance="fill" floatLabel="always">
+  <mat-form-field appearance="fill">
     <mat-label>Username</mat-label>
     <input matInput type="text" formControlName="username" />
     <mat-error *ngIf="username?.invalid">
@@ -7,7 +7,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" floatLabel="always">
+  <mat-form-field appearance="fill">
     <mat-label>Email</mat-label>
     <input matInput type="text" formControlName="email" />
     <mat-error *ngIf="email?.invalid">
@@ -15,7 +15,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" floatLabel="always">
+  <mat-form-field appearance="fill">
     <mat-label>Password</mat-label>
     <input matInput type="password" formControlName="password1" />
     <mat-error *ngIf="password?.invalid && password?.errors?.required">
@@ -27,7 +27,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" floatLabel="always">
+  <mat-form-field appearance="fill">
     <mat-label>Confirm Password</mat-label>
     <input matInput type="password" formControlName="password2" />
     <mat-error *ngIf="confirmPassword?.invalid">
