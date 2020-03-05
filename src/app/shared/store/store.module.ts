@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -17,7 +16,6 @@ import {
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule,
     NgxsModule.forRoot(STATES_MODULES, OPTIONS_CONFIG),
     NgxsReduxDevtoolsPluginModule.forRoot(DEVTOOLS_REDUX_CONFIG),
     NgxsLoggerPluginModule.forRoot(LOGGER_CONFIG),

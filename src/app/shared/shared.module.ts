@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
-import { ComponentsModule } from './components/components.module';
 import { GuardsModule } from './guards/guards.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
 import { ResolversModule } from './resolvers/resolvers.module';
@@ -9,7 +9,7 @@ import { StoreModule } from './store/store.module';
 
 @NgModule({
   imports: [
-    ComponentsModule,
+    HttpClientModule,
     GuardsModule,
     InterceptorModule,
     ResolversModule,
@@ -17,7 +17,7 @@ import { StoreModule } from './store/store.module';
     StoreModule
   ],
   exports: [
-    ComponentsModule,
+    HttpClientModule,
     GuardsModule,
     InterceptorModule,
     ResolversModule,
