@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subscription, combineLatest, interval } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 import { IMazeModel, IOtherModel, IPositionModel } from '../../../models';
 import { GetPlayer, GetOtherPlayers, GetMaze } from '../../../shared/store/game/game.actions';
@@ -41,16 +40,15 @@ export class WorldComponent implements OnInit, OnDestroy {
     );
 
     const mazeContext = this.maze.nativeElement.getContext('2d');
-    const mazeData = await this.maze$.pipe(take(1)).toPromise();
 
     if (!mazeContext) throw new Error('Could not find maze');
     const sprites = new Image();
     sprites.src = 'assets/sprites.png';
 
     sprites.onload = () => {
-      const triggers$ = combineLatest([this.position$, this.others$]);
+      const triggers$ = combineLatest([this.position$, this.others$, this.maze$]);
 
-      this.movementSubscription = triggers$.subscribe(([playerPosition, others]) => {
+      this.movementSubscription = triggers$.subscribe(([playerPosition, others, mazeData]) => {
         this.drawMaze(playerPosition, others, mazeContext, mazeData, sprites);
       });
     };

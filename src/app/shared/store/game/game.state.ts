@@ -4,7 +4,7 @@ import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { pluck } from 'rxjs/operators';
 
 import { GetMaze, GetPlayer, GetOtherPlayers, MovePlayer } from './game.actions';
-import { IGameModel, IMazeModel, IOtherModel, IPositionModel } from '../../../models';
+import { IGameModel, IMazeModel, IMoveModel, IOtherModel, IPositionModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
 
 const defaults: IGameModel = {
@@ -83,15 +83,16 @@ export class GameState {
     { getState, setState }: StateContext<IGameModel>,
     { payload }: MovePlayer
   ) {
-    const { maze, x, y } = await this.http
-      .post<IPositionModel>(`${environment.apiURL}/api/adv/move/`, { direction: payload })
+    const { player, next_maze } = await this.http
+      .post<IMoveModel>(`${environment.apiURL}/api/adv/move/`, { direction: payload })
       .toPromise();
 
     const state = getState();
     setState(
       GameState.setInstanceState({
         ...state,
-        player: { ...state.player, maze, x, y }
+        maze: next_maze || state.maze,
+        player: { ...state.player, ...player }
       })
     );
   }
