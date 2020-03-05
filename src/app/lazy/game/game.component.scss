@@ -38,6 +38,11 @@
   grid-area: world;
 }
 
+app-world {
+  display: flex;
+  justify-content: center;
+}
+
 .character {
   grid-area: character;
 }
