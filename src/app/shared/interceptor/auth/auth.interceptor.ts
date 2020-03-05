@@ -14,7 +14,6 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     const authReq = request.clone({
-      headers: request.headers.set('crossorigin', 'use-credentials'),
       withCredentials: request.url.includes(environment.apiURL)
     });
 
