@@ -36,7 +36,7 @@ export class WorldComponent implements OnInit, OnDestroy {
     const promises = actions.map((action) => this.store.dispatch(action).toPromise());
     await Promise.all(promises);
 
-    this.updateSubscription = interval(100).subscribe(() =>
+    this.updateSubscription = interval(500).subscribe(() =>
       this.store.dispatch(new GetOtherPlayers())
     );
 
@@ -74,52 +74,50 @@ export class WorldComponent implements OnInit, OnDestroy {
         const room = mazeData.rooms[y][x];
         const connectionCount = room.n + room.e + room.s + room.w;
         if (connectionCount === 1) {
-          if (room.n)
-            mazeContext.drawImage(sprites, 16 * 0, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
-          if (room.e)
-            mazeContext.drawImage(sprites, 16 * 1, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
-          if (room.s)
-            mazeContext.drawImage(sprites, 16 * 2, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
-          if (room.w)
-            mazeContext.drawImage(sprites, 16 * 3, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+          if (room.n) mazeContext.drawImage(sprites, 16 * 0, 0, 16, 16, 16 * x, 16 * y, 16, 16);
+          if (room.e) mazeContext.drawImage(sprites, 16 * 1, 0, 16, 16, 16 * x, 16 * y, 16, 16);
+          if (room.s) mazeContext.drawImage(sprites, 16 * 2, 0, 16, 16, 16 * x, 16 * y, 16, 16);
+          if (room.w) mazeContext.drawImage(sprites, 16 * 3, 0, 16, 16, 16 * x, 16 * y, 16, 16);
         }
         if (connectionCount === 2) {
           if (room.n && room.s)
-            mazeContext.drawImage(sprites, 16 * 4, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 4, 0, 16, 16, 16 * x, 16 * y, 16, 16);
           if (room.e && room.w)
-            mazeContext.drawImage(sprites, 16 * 5, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 5, 0, 16, 16, 16 * x, 16 * y, 16, 16);
           if (room.s && room.e)
-            mazeContext.drawImage(sprites, 16 * 6, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 6, 0, 16, 16, 16 * x, 16 * y, 16, 16);
           if (room.e && room.n)
-            mazeContext.drawImage(sprites, 16 * 7, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 7, 0, 16, 16, 16 * x, 16 * y, 16, 16);
           if (room.n && room.w)
-            mazeContext.drawImage(sprites, 16 * 8, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 8, 0, 16, 16, 16 * x, 16 * y, 16, 16);
           if (room.s && room.w)
-            mazeContext.drawImage(sprites, 16 * 9, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 9, 0, 16, 16, 16 * x, 16 * y, 16, 16);
         }
         if (connectionCount === 3) {
           if (room.w && room.s && room.e)
-            mazeContext.drawImage(sprites, 16 * 10, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 10, 0, 16, 16, 16 * x, 16 * y, 16, 16);
           if (room.s && room.e && room.n)
-            mazeContext.drawImage(sprites, 16 * 11, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 11, 0, 16, 16, 16 * x, 16 * y, 16, 16);
           if (room.e && room.n && room.w)
-            mazeContext.drawImage(sprites, 16 * 12, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 12, 0, 16, 16, 16 * x, 16 * y, 16, 16);
           if (room.n && room.w && room.s)
-            mazeContext.drawImage(sprites, 16 * 13, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+            mazeContext.drawImage(sprites, 16 * 13, 0, 16, 16, 16 * x, 16 * y, 16, 16);
         }
-        if (connectionCount === 4)
-          mazeContext.drawImage(sprites, 16 * 14, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+        if (connectionCount === 4) {
+          mazeContext.drawImage(sprites, 16 * 14, 0, 16, 16, 16 * x, 16 * y, 16, 16);
+        }
 
-        if (others.some((otherPosition) => otherPosition.x === x && otherPosition.y === y))
-          mazeContext.drawImage(sprites, 16 * 18, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+        if (others?.some((otherPosition) => otherPosition.x === x && otherPosition.y === y))
+          mazeContext.drawImage(sprites, 16 * 18, 0, 16, 16, 16 * x, 16 * y, 16, 16);
 
-        if (room.id === mazeData.startRoom)
-          mazeContext.drawImage(sprites, 16 * 15, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
-        if (room.id === mazeData.exitRoom)
-          mazeContext.drawImage(sprites, 16 * 16, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+        if (x === mazeData.startRoom.x && y === mazeData.startRoom.y)
+          mazeContext.drawImage(sprites, 16 * 15, 0, 16, 16, 16 * x, 16 * y, 16, 16);
+
+        if (x === mazeData.exitRoom.x && y === mazeData.exitRoom.y)
+          mazeContext.drawImage(sprites, 16 * 16, 0, 16, 16, 16 * x, 16 * y, 16, 16);
 
         if (playerPosition.x === x && playerPosition.y === y)
-          mazeContext.drawImage(sprites, 16 * 17, 0, 16, 16, 16 * x, 16 * (31 - y), 16, 16);
+          mazeContext.drawImage(sprites, 16 * 17, 0, 16, 16, 16 * x, 16 * y, 16, 16);
       }
     }
   }

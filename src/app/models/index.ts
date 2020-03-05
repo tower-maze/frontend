@@ -1,6 +1,7 @@
 export * from './direction.model';
 export * from './game.model';
 export * from './login.model';
+export * from './key-room.model';
 export * from './maze.model';
 export * from './other.model';
 export * from './position.model';

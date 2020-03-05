@@ -1,8 +1,9 @@
+import { IKeyRoomModel } from './key-room.model';
 import { IRoomModel } from './room.model';
 
 export interface IMazeModel {
   title: string;
   rooms: IRoomModel[][];
-  startRoom: number;
-  exitRoom: number;
+  startRoom: IKeyRoomModel;
+  exitRoom: IKeyRoomModel;
 }
