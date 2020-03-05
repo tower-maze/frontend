@@ -8,7 +8,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "analyze": "webpack-bundle-analyzer dist/mud/stats-es2015.json"
   },
   "private": true,
   "dependencies": {
@@ -59,6 +60,7 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-override": "^0.6.0",
     "tslint-plugin-prettier": "^2.1.0",
-    "typescript": "~3.7.5"
+    "typescript": "~3.7.5",
+    "webpack-bundle-analyzer": "^3.6.0"
   }
 }
