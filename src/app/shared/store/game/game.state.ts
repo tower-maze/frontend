@@ -75,7 +75,8 @@ export class GameState {
       .toPromise();
 
     const state = getState();
-    if (others.join(',') === state.others?.join(',')) return;
+
+    if (JSON.stringify(state.others) === JSON.stringify(others)) return;
     setState(GameState.setInstanceState({ ...state, others }));
   }
 

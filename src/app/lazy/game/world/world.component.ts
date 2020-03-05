@@ -112,21 +112,9 @@ export class WorldComponent implements OnInit, OnDestroy {
     others
   ]: [IMazeModel, IPositionModel, IOtherModel[]]) => {
     context.clearRect(0, 0, 512, 512);
-
-    for (let y = 0; y < 32; y++) {
-      for (let x = 0; x < 32; x++) {
-        if (others.some((otherPosition) => otherPosition.x === x && otherPosition.y === y))
-          context.drawImage(...this.getSprite(sprites, 18, x, y));
-
-        if (x === mazeData.startRoom.x && y === mazeData.startRoom.y)
-          context.drawImage(...this.getSprite(sprites, 15, x, y));
-
-        if (x === mazeData.exitRoom.x && y === mazeData.exitRoom.y)
-          context.drawImage(...this.getSprite(sprites, 16, x, y));
-
-        if (playerPosition.x === x && playerPosition.y === y)
-          context.drawImage(...this.getSprite(sprites, 17, x, y));
-      }
-    }
+    others.forEach((other) => context.drawImage(...this.getSprite(sprites, 18, other.x, other.y)));
+    context.drawImage(...this.getSprite(sprites, 15, mazeData.startRoom.x, mazeData.startRoom.y));
+    context.drawImage(...this.getSprite(sprites, 16, mazeData.exitRoom.x, mazeData.exitRoom.y));
+    context.drawImage(...this.getSprite(sprites, 17, playerPosition.x, playerPosition.y));
   };
 }
