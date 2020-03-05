@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Dispatch } from '@ngxs-labs/dispatch-decorator';
 
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { SetError } from '../../store/error/error.actions';
@@ -21,7 +21,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((response) => {
-        if (response.error instanceof Object) {
+        if (response.error instanceof Object && !response.error.movement) {
           const errors = Object.values(response.error).flat();
           this.setError(errors[0]);
         }
