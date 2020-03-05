@@ -12,15 +12,18 @@ import { MovePlayer } from 'src/app/shared/store/game/game.actions';
 })
 export class GameComponent implements OnInit, OnDestroy {
   private movementSubscription: Subscription;
-  
+
   constructor() {}
 
   @Dispatch()
   public logout = () => new Logout();
 
+  @Dispatch()
+  public movePlayer = (direction: Direction) => new MovePlayer(direction);
+
   @Override()
   public ngOnInit() {
-    this.movementSubscription = fromEvent<KeyboardEvent>(document, 'keydown').subscribe((event) => {
+    this.movementSubscription = fromEvent<KeyboardEvent>(document, 'keyup').subscribe((event) => {
       switch (event.key) {
         case 'ArrowUp':
           this.movePlayer('n');
@@ -34,17 +37,12 @@ export class GameComponent implements OnInit, OnDestroy {
         case 'ArrowRight':
           this.movePlayer('e');
           break;
-        default:
-          // ignore other keys
       }
-    })
+    });
   }
 
   @Override()
   public ngOnDestroy() {
-    this.movementSubscription.unsubscribe()
+    this.movementSubscription.unsubscribe();
   }
-
-  @Dispatch()
-  public movePlayer = (direction: Direction) => new MovePlayer(direction);
 }
