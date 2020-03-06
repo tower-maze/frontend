@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { State, Action, Selector, StateContext, Store } from '@ngxs/store';
-import { combineLatest } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { pluck, withLatestFrom } from 'rxjs/operators';
 
 import {
   GetMaze,
@@ -11,7 +10,7 @@ import {
   UpdateOtherPlayers,
   MovePlayer
 } from './game.actions';
-import { IGameModel, IMazeModel, IMoveModel, IOtherModel, IPositionModel } from '../../../models';
+import { IGameModel, IMazeModel, IMoveModel, IOtherModel, IPlayerModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
 import { PusherService } from '../../services/pusher/pusher.service';
 
@@ -28,17 +27,27 @@ const defaults: IGameModel = {
 @Injectable({ providedIn: 'root' })
 export class GameState {
   constructor(private http: HttpClient, private pusher: PusherService, private store: Store) {
-    combineLatest([
-      this.store.select(GameState.getOtherPlayerPosition),
-      this.pusher.getMovementChanges()
-    ]).subscribe(([others, update]) => {
-      const byLatest = (current: IOtherModel) =>
-        current.player === update.player ? update : current;
+    this.pusher
+      .getMovementChanges()
+      .pipe(
+        withLatestFrom(
+          this.store.select(GameState.getPlayer),
+          this.store.select(GameState.getOtherPlayerPosition)
+        )
+      )
+      .subscribe(([update, player, others]) => {
+        if (update.player === player?.id) return;
 
-      const changes = others?.map(byLatest);
-      if (changes && JSON.stringify(others) !== JSON.stringify(changes))
+        const changes = Array.from(others || []);
+        const index = changes.findIndex((other) => other.player === update.player);
+
+        if (index < 0 && update.maze === player?.position?.maze) changes.push(update);
+        else if (index >= 0 && update.maze !== player?.position?.maze) changes.splice(index, 1);
+        else if (index >= 0) changes[index] = update;
+        else return;
+
         this.store.dispatch(new UpdateOtherPlayers(changes));
-    });
+      });
   }
 
   @Selector()
@@ -52,8 +61,13 @@ export class GameState {
   }
 
   @Selector()
-  public static getPlayerPosition(state: IGameModel) {
+  public static getPlayer(state: IGameModel) {
     return GameState.getInstanceState(state).player;
+  }
+
+  @Selector()
+  public static getPlayerPosition(state: IGameModel) {
+    return GameState.getInstanceState(state).player?.position;
   }
 
   @Selector()
@@ -80,7 +94,7 @@ export class GameState {
   @Action(GetPlayer)
   public async getPlayer({ getState, setState }: StateContext<IGameModel>) {
     const player = await this.http
-      .get<IPositionModel>(`${environment.apiURL}/api/adv/init/`)
+      .get<IPlayerModel>(`${environment.apiURL}/api/adv/init/`)
       .toPromise();
 
     const state = getState();
@@ -110,19 +124,21 @@ export class GameState {
 
   @Action(MovePlayer)
   public async movePlayer(
-    { getState, setState }: StateContext<IGameModel>,
+    { dispatch, getState, setState }: StateContext<IGameModel>,
     { payload }: MovePlayer
   ) {
     const { player, nextMaze } = await this.http
       .post<IMoveModel>(`${environment.apiURL}/api/adv/move/`, { direction: payload })
       .toPromise();
 
+    if (nextMaze) dispatch(new GetOtherPlayers());
+
     const state = getState();
     setState(
       GameState.setInstanceState({
         ...state,
         maze: nextMaze || state.maze,
-        player: { ...state.player, ...player }
+        player: { ...state.player, position: { ...state.player?.position, ...player } }
       })
     );
   }

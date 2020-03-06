@@ -7,6 +7,7 @@ export * from './key-room.model';
 export * from './maze.model';
 export * from './move.model';
 export * from './other.model';
+export * from './player.model';
 export * from './position.model';
 export * from './register.model';
 export * from './room.model';
