@@ -2,6 +2,17 @@
   position: relative;
 }
 
+h1 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  background-color: rgba($color: white, $alpha: 0.67);
+}
+
 canvas {
   position: absolute;
+  height: 100%;
+  max-height: min(100%, 1024px, 90vw);
+  max-width: min(100%, 1024px, 90vh);
 }

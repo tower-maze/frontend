@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { OnboardingRoutingModule } from './onboarding-routing.module';
@@ -21,6 +22,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     MatCardModule,
     MatInputModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
     OnboardingRoutingModule
   ]
 })

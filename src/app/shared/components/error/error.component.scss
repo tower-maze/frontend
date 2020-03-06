@@ -1,0 +1,12 @@
+@import 'variables';
+
+::ng-deep {
+  .error-message {
+    background: mat-color($warn);
+    color: white;
+  }
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
