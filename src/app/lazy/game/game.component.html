@@ -13,16 +13,16 @@
 
 <mat-card class="controls mat-elevation-z8">
   <section>
-    <button mat-button (click)="movePlayer('w')">
+    <button mat-button (click)="movePlayer('w')" aria-label="Move West">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <button mat-button (click)="movePlayer('n')">
+    <button mat-button (click)="movePlayer('n')" aria-label="Move North">
       <mat-icon>arrow_upward</mat-icon>
     </button>
-    <button mat-button (click)="movePlayer('s')">
+    <button mat-button (click)="movePlayer('s')" aria-label="Move South">
       <mat-icon>arrow_downward</mat-icon>
     </button>
-    <button mat-button (click)="movePlayer('e')">
+    <button mat-button (click)="movePlayer('e')" aria-label="Move East">
       <mat-icon>arrow_forward</mat-icon>
     </button>
   </section>
