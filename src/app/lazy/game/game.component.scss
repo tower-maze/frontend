@@ -25,6 +25,34 @@
   p {
     margin: 0;
   }
+
+  .legend {
+    margin-left: 8px;
+  }
+
+  .legend::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 10px;
+    background-image: url('../../../assets/sprites.png');
+  }
+
+  .sprite-15::before {
+    background-position: -15*16px, 0px;
+  }
+
+  .sprite-16::before {
+    background-position: -16*16px, 0px;
+  }
+
+  .sprite-17::before {
+    background-position: -17*16px, 0px;
+  }
+
+  .sprite-18::before {
+    background-position: -18*16px, 0px;
+  }
 }
 
 .chat {
