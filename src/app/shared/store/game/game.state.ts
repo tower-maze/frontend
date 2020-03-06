@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { State, Action, Selector, StateContext } from '@ngxs/store';
+import { State, Action, Selector, StateContext, Store } from '@ngxs/store';
+import { combineLatest } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 
-import { GetMaze, GetPlayer, GetOtherPlayers, MovePlayer } from './game.actions';
+import {
+  GetMaze,
+  GetPlayer,
+  GetOtherPlayers,
+  UpdateOtherPlayers,
+  MovePlayer
+} from './game.actions';
 import { IGameModel, IMazeModel, IMoveModel, IOtherModel, IPositionModel } from '../../../models';
 import { environment } from '../../../../environments/environment';
+import { PusherService } from '../../services/pusher/pusher.service';
 
 const defaults: IGameModel = {
   player: undefined,
@@ -19,7 +27,19 @@ const defaults: IGameModel = {
 })
 @Injectable({ providedIn: 'root' })
 export class GameState {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private pusher: PusherService, private store: Store) {
+    combineLatest([
+      this.store.select(GameState.getOtherPlayerPosition),
+      this.pusher.getMovementChanges()
+    ]).subscribe(([others, update]) => {
+      const byLatest = (current: IOtherModel) =>
+        current.player === update.player ? update : current;
+
+      const changes = others?.map(byLatest);
+      if (changes && JSON.stringify(others) !== JSON.stringify(changes))
+        this.store.dispatch(new UpdateOtherPlayers(changes));
+    });
+  }
 
   @Selector()
   public static getGameState(state: IGameModel) {
@@ -75,9 +95,17 @@ export class GameState {
       .toPromise();
 
     const state = getState();
+    if (JSON.stringify(state.others) !== JSON.stringify(others))
+      setState(GameState.setInstanceState({ ...state, others }));
+  }
 
-    if (JSON.stringify(state.others) === JSON.stringify(others)) return;
-    setState(GameState.setInstanceState({ ...state, others }));
+  @Action(UpdateOtherPlayers)
+  public async updateOtherPlayers(
+    { getState, setState }: StateContext<IGameModel>,
+    { payload }: UpdateOtherPlayers
+  ) {
+    const state = getState();
+    setState(GameState.setInstanceState({ ...state, others: payload }));
   }
 
   @Action(MovePlayer)

@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  apiURL: '/api'
+  apiURL: '/api',
+  pusherKey: '4e141243abf4aa14dd30',
+  pusherCluster: 'us3',
+  pusherChannel: 'Tower-Maze'
 };
 
 /*

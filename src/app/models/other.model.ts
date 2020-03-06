@@ -1,3 +1,5 @@
-import { IPositionModel } from './position.model';
-
-export type IOtherModel = Omit<IPositionModel, 'maze'>;
+export interface IOtherModel {
+  player: number;
+  x: number;
+  y: number;
+}
